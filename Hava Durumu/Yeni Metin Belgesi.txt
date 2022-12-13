@@ -1,0 +1,20 @@
+# her saatır için lokasyon(il ve ilçeye göre) ve tarihe göre hava durumu ortalama degerlerini yeni bir kolonda gösteriyoruz
+for dfDegisken in [bagilNemDF,bulutsuzlukOraniDF,radyasyonDF,ruzgarHiziDF,ruzgarYonuDF,sicaklikDF,yagisDF]:
+    ortalama = dfDegisken.groupby("Tarih").mean().to_dict()
+    tarihler=dfDegisken.groupby("Tarih").mean().index
+    if(str(dfDegisken)==str(bagilNemDF)):
+        kolon_adi="BAĞIL_NEM"
+    elif(str(dfDegisken)==str(bulutsuzlukOraniDF)):
+        kolon_adi="BULUTSUZLUK_ORANI"
+    elif(str(dfDegisken)==str(radyasyonDF)):
+        kolon_adi="RADYASYON"
+    elif(str(dfDegisken)==str(ruzgarHiziDF)):
+        kolon_adi="RUZGAR_HIZI"
+    elif(str(dfDegisken)==str(ruzgarYonuDF)):
+        kolon_adi="RUZGAR_YONU"
+    elif(str(dfDegisken)==str(sicaklikDF)):
+        kolon_adi="SICAKLIK"
+    elif(str(dfDegisken)==str(yagisDF)):
+        kolon_adi="YAGIS"
+    
+    trainDF[kolon_adi] = trainDF.apply(lambda x: ortalama[x["LOKASYON"]][x["BAŞLAMA_TARİHİ"]] if x["BAŞLAMA_TARİHİ"] in tarihler else 0.0,axis=1)
